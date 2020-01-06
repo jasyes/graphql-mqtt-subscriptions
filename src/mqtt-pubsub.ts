@@ -154,7 +154,7 @@ export class MQTTPubSub implements PubSubEngine {
 
   private onMessage(topic: string, message: Buffer) {
     const subscribers = [].concat(
-        ...Object.keys(this.subsRefsMap)
+      ...Object.keys(this.subsRefsMap)
         .filter((key) => MQTTPubSub.matches(key, topic))
         .map((key) => this.subsRefsMap[key]),
     );
@@ -173,7 +173,10 @@ export class MQTTPubSub implements PubSubEngine {
 
     for (const subId of subscribers) {
       const listener = this.subscriptionMap[subId][1];
-      listener(parsedMessage);
+      listener({
+        topic,
+        data: parsedMessage
+      });
     }
   }
 }
